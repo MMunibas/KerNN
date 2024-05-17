@@ -63,7 +63,7 @@ def plot_corr(e_true, e_pred, F, forces, model_path):
 
     ax0.set_ylabel('$\\Delta E$ (kcal/mol)', fontsize=18)
     ax1.set_ylabel('$E_{\\rm KerNN}$ (kcal/mol)', fontsize=18)
-    ax1.set_xlabel('$E_{\\rm MP2}$ (kcal/mol)', fontsize=18)
+    ax1.set_xlabel('$E_{\\rm Ref.}$ (kcal/mol)', fontsize=18)
     
 
 
