@@ -22,7 +22,7 @@ b) Create an environment named (e.g.) kernn_env, install Python 3.8:
 
    Activate it:
 
-    conda activate physnet_env
+    conda activate kernn_env
 
     (deactivating it by typing: conda deactivate)
 
