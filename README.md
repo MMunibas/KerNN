@@ -36,7 +36,10 @@ d) Add the *utils* folder to your python path (to make it "visible" from everywh
     export PYTHONPATH=$HOME/phd_projects/KerNN/PYTORCH/github/KerNN/
 
 
+e) If required, install Grimme's xtb-python software (e.g. to perfrom an initial sampling)
 
+    conda config --add channels conda-forge
+    conda install xtb-python
 
 
 
