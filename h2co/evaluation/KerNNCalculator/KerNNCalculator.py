@@ -34,8 +34,15 @@ class KerNNCalculator:
         self.model = FFNet(n_input,n_hidden,n_out)
                               
         #load parameters
-        self.model.load_state_dict(torch.load(model_path))
-        self.model = self.model.double()
+        #in case just one model is used:
+        if (type(self.model_path) is not list):
+            self.model.load_state_dict(torch.load(model_path))
+            self.model = self.model.double()
+            
+        #the other case is an ensemble, to start we only load the first.
+        else:
+            self.model.load_state_dict(torch.load(model_path[0]))
+            self.model = self.model.double()
 
         #calculate properties once to initialize everything
         self._calculate_all_properties(atoms)
@@ -61,10 +68,37 @@ class KerNNCalculator:
 
 
         #calculate energy and forces
-        self._last_energy = self.model(k) * stdE + meanE
-        
-        self._last_forces = -torch.autograd.grad(torch.sum(self._last_energy), pos, create_graph=True)[0]
+        #in case just one model is used:
+        if (type(self.model_path) is not list):
+            self._last_energy = self.model(k) * stdE + meanE
+            self._last_forces = -torch.autograd.grad(torch.sum(self._last_energy), pos, create_graph=True)[0]
+            
+            
+        else: #ensemble is used
+            
+            for i in range(len(self.model_path)):
+                self.model.load_state_dict(torch.load(self.model_path[i]))
+                self.model = self.model.double()
+                if i == 0:
+                    self._last_energy = self.model(k) * stdE + meanE
+                    self._last_forces = -torch.autograd.grad(torch.sum(self._last_energy), pos, create_graph=True)[0]
+                    self._energy_stdev = 0
 
+
+                else:                                
+                    etmp = self.model(k) * stdE + meanE
+                    ftmp = -torch.autograd.grad(torch.sum(etmp), pos, create_graph=True)[0]
+                    n = i+1
+                    delta = etmp-self.last_energy
+                    self._last_energy += delta/n
+                    self._energy_stdev += delta*(etmp-self.last_energy)
+                    for a in range(self.n_atoms): #loop over atoms
+                        for b in range(3):
+                            self._last_forces[a,b] += (ftmp[a,b]-self.last_forces[a,b])/n 
+
+            if(len(self.model_path) > 1):
+                self._energy_stdev = torch.sqrt(self._energy_stdev/len(self.model_path))
+                #print(self._energy_stdev)
 
         #store copy of atoms
         self._last_atoms = atoms.copy()
@@ -113,5 +147,9 @@ class KerNNCalculator:
     @property
     def forces(self):
         return self._forces
+        
+    @property
+    def energy_stdev(self):
+        return self._energy_stdev.detach().numpy()[0]
 
 
