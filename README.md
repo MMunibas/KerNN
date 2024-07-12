@@ -13,6 +13,7 @@ This repository contains instructions for the installation and dependencies, whi
 
 The following installation steps were tested on a Ubuntu 20.04 workstation and using
 Conda 23.11.0 (see https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
+Occasional problems were encountered with the conda/miniconda installation, which required adding additional information to the .bashrc file (typically these lines are added automatically when installing conda) - see anac_block.txt for exemplary lines to add to bashrc.
 
 a) If not installed already, install Miniconda on your machine (see https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
 
