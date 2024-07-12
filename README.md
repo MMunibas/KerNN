@@ -50,11 +50,12 @@ e) If required, install Grimme's xtb-python software (e.g. to perfrom an initial
 The *ab initio* reference data for H<sub>2</sub>CO was available from previous work [1]. The data set contains a total of 4001 configurations generated using normal mode sampling [2] including the optimized H<sub>2</sub>CO structure. *Ab initio* energies, forces and dipole moments were obtained for all structures at the CCSD(T)-F12B/aug-cc-pVTZ-F12 level of theory using MOLPRO. To capture the equilibrium, room temperature, and higher energy regions of the PES, the normal mode sampling was carried out at eight different temperatures (10, 50, 100, 300, 500, 1000, 1500, and 2000 K). For each temperature, 500 structures were generated. The data set is given in *h2co/training/datasets* or is available from Zenodo (https://zenodo.org/records/3923823).
 
 Most of the hyperparameters and settings for training are given in the *train_kernn_gpu.py* script. These include NN architecture (number of inputs to the neural network, number of nodes in the hidden layers, number of outputs), training parameters (number of validation points, batch size, validation batch size, learning rate, weight factor for the force term in the loss function, ...).
-The number of training points and a seed are given as command line arguments to the training script. To start training on the reference data (using a training set size of 3200 and a seed of 42), run
+The number of training points and a seed are given as command line arguments to the training script. For a given combination of training set size and seed (here 3200 and 42, respectively)
+make sure you create a folder named *models_ntrain3200_seed42* beforehand. It will be used to save the KerNN models. To start training on the reference data, run
 
     ./train_kernn_gpu.py 3200 42
     
-For this combination of training set size and seed make sure you create a folder named *models_ntrain3200_seed42* beforehand. It will be used to save the KerNN models. The 
+The 
 progress of the training is printed to the console and can be visualized with tensorboard (*i.e. by typing tensorboard --logdir .*, if the training is run in the same directory).
 Note that a new model is only saved if its validation loss is lower than any of the models before. Once the validation loss has not improved for a total of 2000 epochs, the training is terminated automatically. Once the training has terminated, the script will automatically plot the correlation of the reference and predicted energies (and save a .png to the models folder) and once the plot
 is closed it will print the test set statistics (*e.g. MAE(E), RMSE(E), MAE(F), ...*), which will also be saved to a text file. Note that if no GPU is available, the script will will run on CPU (which for such small systems is not slower anyway). The *runs* folder that is created when you train a model is only used to visualize the progress of the training and can be deleted after completion.
