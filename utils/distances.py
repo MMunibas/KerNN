@@ -37,39 +37,7 @@ def get_bond_length_ABA(pos, nintdist):
     return dist
 
 
-def get_bond_length_ABA_sym(pos, nintdist):
-    """
-    function that calculates the interatomic distances
-    of a molecule with ABA symmetry (such as HeH2+ or H2O)
-    This function does not take permutational invariance
-    into account.
-    
-    the numbering is (for the HeH2+ case)
-    H:  0
-    He: 1
-    H:  2
-    
-    and bond distances
-    0: H1-He
-    1: H2-He
-    2: H1-H2
-    
-    """
-    if len(pos.shape) == 2:
-        dist = torch.zeros(nintdist)
-        dist[0] = torch.linalg.norm(pos[0, :] - pos[1, :]) + torch.linalg.norm(pos[1, :] - pos[2, :])
-        dist[1] = torch.linalg.norm(pos[0, :] - pos[1, :])**2 + torch.linalg.norm(pos[1, :] - pos[2, :])**2
-        dist[2] = torch.linalg.norm(pos[0, :] - pos[2, :])
-    elif len(pos.shape) == 3:
-        dist = torch.zeros(pos.shape[0], nintdist)
-        dist[:, 0] = torch.linalg.norm(pos[:, 0, :] - pos[:, 1, :], axis=1) + torch.linalg.norm(pos[:, 1, :] - pos[:, 2, :], axis=1)
-        dist[:, 1] = torch.linalg.norm(pos[:, 0, :] - pos[:, 1, :], axis=1)**2 + torch.linalg.norm(pos[:, 1, :] - pos[:, 2, :], axis=1)**2
-        dist[:, 2] = torch.linalg.norm(pos[:, 0, :] - pos[:, 2, :], axis=1)
-    else:
-        print("ERROR: Please check that the shape of the position array is correct")
-    return dist
-    
-    
+
 
 def get_bond_length_ABCC(pos, nintdist):
     """
@@ -113,52 +81,6 @@ def get_bond_length_ABCC(pos, nintdist):
         print("ERROR: Please check that the shape of the position array is correct")
     return dist
 
-
-def get_bond_length_ABCC_sym(pos, nintdist):
-    """
-    function that calculates the interatomic distances
-    of the h2co molecule given the cartesian coord.
-    
-    Permutational invariance is included using fundamental
-    invariants (https://doi.org/10.1063/1.4961454)
-    
-    The numbering is 
-    C:0
-    O:1
-    H:2
-    H:3
-    and bond distances
-    0: C-O
-    1: C-H1
-    2: C-H2
-    3: O-H2
-    4: O-H3
-    5: H2-H3
-    
-    """
-    if len(pos.shape) == 2:
-
-        dist = torch.zeros(nintdist+1)
-        dist[0] = torch.linalg.norm(pos[0, :] - pos[1, :])
-        dist[1] = torch.linalg.norm(pos[0, :] - pos[2, :]) + torch.linalg.norm(pos[0, :] - pos[3, :])
-        dist[2] = torch.linalg.norm(pos[1, :] - pos[2, :]) + torch.linalg.norm(pos[1, :] - pos[3, :])
-        dist[3] = torch.linalg.norm(pos[0, :] - pos[2, :])**2 + torch.linalg.norm(pos[0, :] - pos[3, :])**2
-        dist[4] = torch.linalg.norm(pos[1, :] - pos[2, :])**2 + torch.linalg.norm(pos[1, :] - pos[3, :])**2
-        dist[5] = torch.linalg.norm(pos[0, :] - pos[2, :])*torch.linalg.norm(pos[1, :] - pos[2, :]) + torch.linalg.norm(pos[0, :] - pos[3, :])*torch.linalg.norm(pos[1, :] - pos[3, :])
-        dist[6] = torch.linalg.norm(pos[2, :] - pos[3, :])
-    elif len(pos.shape) == 3:
-        dist = torch.zeros(pos.shape[0], nintdist+1)
-        dist[:, 0] = torch.linalg.norm(pos[:, 0, :] - pos[:, 1, :], axis=1)
-        dist[:, 1] = torch.linalg.norm(pos[:, 0, :] - pos[:, 2, :], axis=1) + torch.linalg.norm(pos[:, 0, :] - pos[:, 3, :], axis=1)
-        dist[:, 2] = torch.linalg.norm(pos[:, 1, :] - pos[:, 2, :], axis=1) + torch.linalg.norm(pos[:, 1, :] - pos[:, 3, :], axis=1)
-        dist[:, 3] = torch.linalg.norm(pos[:, 0, :] - pos[:, 2, :], axis=1)**2 + torch.linalg.norm(pos[:, 0, :] - pos[:, 3, :], axis=1)**2
-        dist[:, 4] = torch.linalg.norm(pos[:, 1, :] - pos[:, 2, :], axis=1)**2 + torch.linalg.norm(pos[:, 1, :] - pos[:, 3, :], axis=1)**2
-        dist[:, 5] = torch.linalg.norm(pos[:, 0, :] - pos[:, 2, :], axis=1)*torch.linalg.norm(pos[:, 1, :] - pos[:, 2, :], axis=1) + torch.linalg.norm(pos[:, 0, :] - pos[:, 3, :], axis=1)*torch.linalg.norm(pos[:, 1, :] - pos[:, 3, :], axis=1)
-        dist[:, 6] = torch.linalg.norm(pos[:, 2, :] - pos[:, 3, :], axis=1)
-
-    else:
-        print("ERROR: Please check that the shape of the position array is correct")
-    return dist
     
     
 

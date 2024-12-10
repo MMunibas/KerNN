@@ -1,0 +1,7 @@
+In addition to the scripts that were described for h2co, here we add an
+optimization script (optimize_crit_fine.py) which can also be used to
+optimize TS (once the initial guess is in vicinity of the TS). Additionally,
+the script NN_NM.py uses the models Hessian to calculate the harmonic 
+frequencies.
+
+
