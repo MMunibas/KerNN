@@ -56,7 +56,7 @@ make sure you create a folder named *models_ntrain3200_seed42* beforehand. It wi
 
     ./train_kernn_gpu.py 3200 42
     
-The 
+The expected runtime for 100 epochs using a training set of 3200 is less than 30 seconds (running on CPU of a Intel(R) Core(TM) i7-9700K CPU @ 3.60GHz workstation.) The 
 progress of the training is printed to the console and can be visualized with tensorboard (*i.e. by typing tensorboard --logdir .*, if the training is run in the same directory).
 Note that a new model is only saved if its validation loss is lower than any of the models before. Once the validation loss has not improved for a total of 2000 epochs, the training is terminated automatically. Once the training has terminated, the script will automatically plot the correlation of the reference and predicted energies (and save a .png to the models folder) and once the plot
 is closed it will print the test set statistics (*e.g. MAE(E), RMSE(E), MAE(F), ...*), which will also be saved to a text file. Note that if no GPU is available, the script will will run on CPU (which for such small systems is not slower anyway). The *runs* folder that is created when you train a model is only used to visualize the progress of the training and can be deleted after completion.
