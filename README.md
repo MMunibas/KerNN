@@ -73,7 +73,7 @@ Note on the different models one could train in *h2co/training/*
 - *kernn_ns*: Model that is not permutationally invariant and predicts energies and forces.
 - *kernn_ns_efmu*: Model that is not permutationally invariant and predicts energies, forces and dipole moments.
 - *kernn_s*: Model that is permutationally invariant and predicts energies and forces.
-
+- *MACE*: Repository containing the MACE configuration (closely following the MACE user guide, https://mace-docs.readthedocs.io/en/latest/guide/training.html)
 
 
 
