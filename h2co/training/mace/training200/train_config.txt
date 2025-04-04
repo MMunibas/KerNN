@@ -1,0 +1,28 @@
+nohup python /home/kaeser/conda/envs/mace-env/lib/python3.9/site-packages/mace/cli/run_train.py \
+    --name="MACE_model" \
+    --train_file="train_h2co.xyz" \
+    --valid_file="valid_h2co.xyz" \
+    --valid_batch_size=400 \
+    --test_file="test_h2co.xyz" \
+    --forces_key="forces_ref" \
+    --energy_key="energy_ref" \
+    --config_type_weights='{"Default":1.0}' \
+    --E0s='{1:0.0, 6:0.0, 8:0.0}' \
+    --model="MACE" \
+    --hidden_irreps='128x0e + 128x1o' \
+    --r_max=5.0 \
+    --batch_size=10 \
+    --max_num_epochs=5000 \
+    --swa \
+    --start_swa=4500 \
+    --ema \
+    --ema_decay=0.99 \
+    --amsgrad \
+    --restart_latest \
+    --device=cuda \
+    &
+    
+python /home/kaeser/conda/envs/mace-env/lib/python3.9/site-packages/mace/cli/eval_configs.py \
+    --configs="test_h2co.xyz" \
+    --model="MACE_model.model" \
+    --output="./test_output.xyz"
